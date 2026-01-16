@@ -1,0 +1,12 @@
+{
+    "data_yaml_path": "data_classification_chamber.yaml",
+    "data_path": "example/path",
+    "model_size": "small",
+    "checkpoints_dir": "checkpoints",
+    "epochs": 100,
+    "batch_size": 20,
+    "device": "cuda",
+    "val_split": 0.1,
+    "img_size": 416,
+    "checkpoint_run_id": null
+}

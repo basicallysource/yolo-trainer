@@ -1,4 +1,5 @@
 import os
+import shutil
 from ultralytics import YOLO
 from config import build_config
 from dataset_utils import split_train_val
@@ -9,17 +10,25 @@ def main():
 
     checkpoint_path = os.path.join(config["checkpoints_dir"], config["current_run_id"])
     last_checkpoint = os.path.join(checkpoint_path, "last.pt")
+
+    # Copy yaml to data directory so ultralytics resolves relative paths correctly
+    source_yaml = config["data_yaml_path"]
+    if not os.path.exists(source_yaml):
+        raise FileNotFoundError(f"Dataset configuration file not found: {source_yaml}")
+
     data_yaml = os.path.join(config["data_path"], "data.yaml")
+    shutil.copy(source_yaml, data_yaml)
+    print(f"Copied {source_yaml} to {data_yaml}")
 
-    if not os.path.exists(data_yaml):
-        raise FileNotFoundError(f"Dataset configuration file not found: {data_yaml}")
-
-    # Perform train/val split if requested
-    if config["val_split"] is not None:
+    # Perform train/val split if needed
+    val_images_dir = os.path.join(config["data_path"], "images", "val")
+    if os.path.exists(val_images_dir) and os.listdir(val_images_dir):
+        print(f"Validation split already exists at {val_images_dir}, skipping split")
+    elif config["val_split"] is not None:
         print(f"Performing train/validation split with ratio: {config['val_split']}")
         split_train_val(config["data_path"], config["val_split"])
     else:
-        print("No validation split requested, using existing train/val directories")
+        raise ValueError("No validation data found and no val_split ratio provided in config")
 
     if os.path.exists(last_checkpoint):
         print(f"Loading checkpoint from: {last_checkpoint}")
