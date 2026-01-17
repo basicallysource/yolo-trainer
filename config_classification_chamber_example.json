@@ -1,6 +1,6 @@
 {
     "data_yaml_path": "data_classification_chamber.yaml",
-    "data_path": "example/path",
+    "data_path": "/home/ubuntu/yolo-trainer/data",
     "model_size": "small",
     "checkpoints_dir": "checkpoints",
     "epochs": 100,

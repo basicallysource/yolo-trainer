@@ -30,7 +30,7 @@ def main():
 
         # Debug: print detection count
         num_detections = len(results[0].boxes) if results[0].boxes is not None else 0
-        print(f"Frame processed - {num_detections} detections")
+        #print(f"Frame processed - {num_detections} detections")
 
         annotated = results[0].plot()
         cv2.imshow("YOLO Test", annotated)
